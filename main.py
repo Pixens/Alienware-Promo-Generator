@@ -1,21 +1,19 @@
-import json
 import re
+import os
+import json
 import time
 import names
-import requests
-import tls_client
-import os
 import random
 import secrets
+import requests
 import datetime
 import threading
+import tls_client
 
-from tls_client.exceptions import TLSClientExeption
-from bs4 import BeautifulSoup
 from colorama import Fore
+from bs4 import BeautifulSoup
+from tls_client.exceptions import TLSClientExeption
 
-
-os.system("")
 
 # Input your https://dashboard.capsolver.com/passport/register?inviteCode=LyJfsyi3ypCa API Key in the field below.
 CAPSOLVER_KEY = ""
@@ -23,6 +21,7 @@ CAPSOLVER_KEY = ""
 with open("proxies.txt", "r") as p:
     proxies = p.read().splitlines()
 
+os.system("")
 end_gen = False
 thread_lock = threading.Lock()
 user_agent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"
@@ -102,6 +101,8 @@ class Utils:
             else:
                 count += 1
                 time.sleep(1)
+        else:
+            raise Exception(f"Failed to get verification email | {user}@{domain}")
 
 
 class Logger:
@@ -274,7 +275,7 @@ class GeneratePromo:
         else:
             raise Exception(f"Failed to verify e-mail | {self.email}")
 
-    def set_password(self):
+    def set_password(self) -> None:
         try:
             response = self.session.get("https://in.alienwarearena.com/incomplete", headers=self.page_headers)
         except TLSClientExeption:
@@ -376,7 +377,7 @@ class GeneratePromo:
         else:
             raise Exception(f"Failed to get promo code | {self.email}.")
 
-    def generate_promo(self, thread_id) -> None:
+    def generate_promo(self, thread_id: int) -> None:
         global end_gen
 
         try:
@@ -451,5 +452,5 @@ if __name__ == "__main__":
     else:
         print()
         Logger.error(
-            "Ended creator due to no stock of promo keys."
+            "[END] Ended creator due to no stock of promo keys."
         )
