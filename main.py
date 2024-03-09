@@ -362,7 +362,6 @@ class GeneratePromo:
             return self.extract_promo_key(user_id, user_uuid, user_country, login_id)
 
         if response.status_code == 200:
-            print(response.text)
             return True
         else:
             raise Exception(f"Failed to get promo key | {self.email} | " + response.json()["errorMessage"])
@@ -417,7 +416,7 @@ class GeneratePromo:
             thread_lock.acquire()
             with open("promos.txt", "a") as f:
                 f.write(
-                    f"https://promos.discord.gg/{key}"
+                    f"https://promos.discord.gg/{key}\n"
                 )
             thread_lock.release()
 
