@@ -74,13 +74,13 @@ class Utils:
                 raise Exception("Failed to solve captcha.")
 
     @staticmethod
-    def extract_token(html: bytes, name: str) -> str:
+    def extract_token(html: str, name: str) -> str:
         soup = BeautifulSoup(html, 'html.parser')
         token = soup.find('input', {'name': name}).get('value')
         return token
 
     @staticmethod
-    def extract_link(html: bytes) -> str:
+    def extract_link(html: str) -> str:
         soup = BeautifulSoup(html, 'html.parser')
         activation_link = soup.find('a', class_='mcnButton')['href']
         return activation_link
@@ -217,7 +217,7 @@ class GeneratePromo:
         except TLSClientExeption:
             return self.register_account()
 
-        token = Utils.extract_token(response.content, "user_registration[_token]")
+        token = Utils.extract_token(response.text, "user_registration[_token]")
 
         data = {
             "user_registration[email][first]": self.email,
@@ -260,7 +260,7 @@ class GeneratePromo:
         except TLSClientExeption:
             return self.verify_email(verification_link)
 
-        token = Utils.extract_token(response.content, "platformd_user_confirm_registration[_token]")
+        token = Utils.extract_token(response.text, "platformd_user_confirm_registration[_token]")
         data = {
             "platformd_user_confirm_registration[confirm]": "",
             "platformd_user_confirm_registration[_token]": token
@@ -281,7 +281,7 @@ class GeneratePromo:
         except TLSClientExeption:
             return self.set_password()
 
-        token = Utils.extract_token(response.content, "platformd_incomplete_account[_token]")
+        token = Utils.extract_token(response.text, "platformd_incomplete_account[_token]")
 
         password = secrets.token_hex(6)
         data = {
@@ -303,7 +303,7 @@ class GeneratePromo:
         except TLSClientExeption:
             return self.complete_profile()
 
-        token = Utils.extract_token(response.content, "platformd_incomplete_account[_token]")
+        token = Utils.extract_token(response.text, "platformd_incomplete_account[_token]")
         data = {
             "platformd_incomplete_account[firstname]": names.get_first_name(),
             "platformd_incomplete_account[lastname]": names.get_last_name(),
@@ -362,6 +362,7 @@ class GeneratePromo:
             return self.extract_promo_key(user_id, user_uuid, user_country, login_id)
 
         if response.status_code == 200:
+            print(response.text)
             return True
         else:
             raise Exception(f"Failed to get promo key | {self.email} | " + response.json()["errorMessage"])
@@ -390,6 +391,9 @@ class GeneratePromo:
                 user=self.email.split("@")[0],
                 domain=self.email.split("@")[1]
             )
+            if not verification_link:
+                raise Exception(f"Failed to get verification link | {self.email}.")
+
             self.verify_email(verification_link)
 
             Logger.info(
