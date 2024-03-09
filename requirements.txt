@@ -3,3 +3,4 @@ requests
 beautifulsoup4
 colorama
 tls-client
+typing-extensions
