@@ -18,7 +18,7 @@ from colorama import Fore
 os.system("")
 
 # Input your https://dashboard.capsolver.com/passport/register?inviteCode=LyJfsyi3ypCa API Key in the field below.
-CAPSOLVER_KEY = "CAP-"
+CAPSOLVER_KEY = ""
 
 with open("proxies.txt", "r") as p:
     proxies = p.read().splitlines()
