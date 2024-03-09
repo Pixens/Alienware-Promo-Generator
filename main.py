@@ -30,7 +30,7 @@ user_agent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36
 class Utils:
 
     @staticmethod
-    def fetch_email():
+    def fetch_email() -> str:
         response = requests.get("https://www.1secmail.com/api/v1/?action=genRandomMailbox&count=1")
         if response.status_code == 200:
             email = response.json()[0]
@@ -39,7 +39,7 @@ class Utils:
             return Utils.fetch_email()
 
     @staticmethod
-    def solve_recaptcha(page_action):
+    def solve_recaptcha(page_action: str) -> str:
         task_payload = {
             "clientKey": CAPSOLVER_KEY,
             "task": {
@@ -74,19 +74,19 @@ class Utils:
                 raise Exception("Failed to solve captcha.")
 
     @staticmethod
-    def extract_token(html, name):
+    def extract_token(html: bytes, name: str) -> str:
         soup = BeautifulSoup(html, 'html.parser')
         token = soup.find('input', {'name': name}).get('value')
         return token
 
     @staticmethod
-    def extract_link(html):
+    def extract_link(html: bytes) -> str:
         soup = BeautifulSoup(html, 'html.parser')
         activation_link = soup.find('a', class_='mcnButton')['href']
         return activation_link
 
     @staticmethod
-    def extract_verification_link(user, domain):
+    def extract_verification_link(user: str, domain: str) -> str:
         count = int()
         while count < 300:
             response = requests.get(f"https://www.1secmail.com/api/v1/?action=getMessages&login={user}&domain={domain}")
@@ -107,19 +107,19 @@ class Utils:
 
 class Logger:
     @staticmethod
-    def info(content):
+    def info(content: str) -> None:
         print(
             f'{Fore.LIGHTBLACK_EX}[{datetime.datetime.now().strftime("%I:%M:%S %p")}] {Fore.GREEN}{content}{Fore.RESET}'
         )
 
     @staticmethod
-    def error(content):
+    def error(content: str) -> None:
         print(
             f'{Fore.LIGHTBLACK_EX}[{datetime.datetime.now().strftime("%I:%M:%S %p")}] {Fore.RED}{content}{Fore.RESET}'
         )
 
     @staticmethod
-    def inp(content):
+    def inp(content: str) -> str:
         return (
             f'{Fore.LIGHTBLACK_EX}[{datetime.datetime.now().strftime("%I:%M:%S %p")}] {Fore.CYAN}{content}{Fore.RESET}'
         )
@@ -127,7 +127,7 @@ class Logger:
 
 class GeneratePromo:
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.session = tls_client.Session(
             client_identifier="chrome_122"
         )
@@ -428,7 +428,7 @@ class GeneratePromo:
 
 if __name__ == "__main__":
 
-    def create_promo(thread_id):
+    def create_promo(thread_id: int) -> None:
         Logger.info(
             f"[{thread_id}] Started task."
         )
