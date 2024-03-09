@@ -1,6 +1,8 @@
 # Alienware-Promo-Generator
 
-Creates 1 Month Nitro Promo Links using the Nitro X Alienware collaboration.
+- Creates 1 Month Nitro Promo Links using the Nitro X Alienware collaboration.
+- Buy Best Discord Tools at https://boostup.cc
+
 <div id="top"></div>
 <p align="left">
   <img src="https://img.shields.io/github/stars/Pixens/Alienware-Promo-Generator.svg?style=for-the-badge"/>
