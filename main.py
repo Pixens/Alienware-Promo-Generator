@@ -24,7 +24,6 @@ with open("proxies.txt", "r") as p:
 os.system("")
 end_gen = False
 thread_lock = threading.Lock()
-user_agent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"
 
 
 class Utils:
@@ -39,7 +38,7 @@ class Utils:
             return Utils.fetch_email()
 
     @staticmethod
-    def solve_recaptcha(page_action: str) -> str:
+    def solve_recaptcha(user_agent: str, page_action: str) -> str:
         task_payload = {
             "clientKey": CAPSOLVER_KEY,
             "task": {
@@ -128,15 +127,18 @@ class Logger:
 class GeneratePromo:
 
     def __init__(self) -> None:
+        self.chrome_version = random.randint(110, 122)
+        self.user_agent = f"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{self.chrome_version}.0.0.0 Safari/537.36"
         self.session = tls_client.Session(
-            client_identifier="chrome_122"
+            client_identifier=f"chrome_{self.chrome_version}",
+            random_tls_extension_order=True
         )
         self.session.timeout_seconds = 30
 
-        proxy = random.choice(proxies)
+        self.proxy = random.choice(proxies)
         self.session.proxies = {
-            "http": f"http://{proxy}",
-            "https": f"http://{proxy}"
+            "http": f"http://{self.proxy}",
+            "https": f"http://{self.proxy}"
         }
 
         self.page_headers = {
@@ -148,7 +150,7 @@ class GeneratePromo:
             "Host": "in.alienwarearena.com",
             "Origin": "https://in.alienwarearena.com",
             "Referer": "https://in.alienwarearena.com/account/register",
-            "sec-ch-ua": '"Chromium";v="122", "Not(A:Brand";v="24", "Google Chrome";v="122"',
+            "sec-ch-ua": f'"Chromium";v="{self.chrome_version}", "Not(A:Brand";v="24", "Google Chrome";v="{self.chrome_version}"',
             "sec-ch-ua-mobile": "?0",
             "sec-ch-ua-platform": '"macOS"',
             "Sec-Fetch-Dest": "document",
@@ -156,7 +158,7 @@ class GeneratePromo:
             "Sec-Fetch-Site": "same-origin",
             "Sec-Fetch-User": "?1",
             "Upgrade-Insecure-Requests": "1",
-            "User-Agent": user_agent
+            "User-Agent": self.user_agent
         }
 
         self.email_headers = {
@@ -165,7 +167,7 @@ class GeneratePromo:
             "Accept-Language": "en-GB,en-US;q=0.9,en;q=0.8",
             "Connection": "keep-alive",
             "Host": "mandrillapp.com",
-            "sec-ch-ua": '"Chromium";v="122", "Not(A:Brand";v="24", "Google Chrome";v="122"',
+            "sec-ch-ua": f'"Chromium";v="{self.chrome_version}", "Not(A:Brand";v="24", "Google Chrome";v="{self.chrome_version}"',
             "sec-ch-ua-mobile": "?0",
             "sec-ch-ua-platform": '"macOS"',
             "Sec-Fetch-Dest": "document",
@@ -183,13 +185,13 @@ class GeneratePromo:
             "Host": "giveawayapi.alienwarearena.com",
             "Origin": "https://in.alienwarearena.com",
             "Referer": "https://in.alienwarearena.com/",
-            "sec-ch-ua": '"Chromium";v="122", "Not(A:Brand";v="24", "Google Chrome";v="122"',
+            "sec-ch-ua": f'"Chromium";v="{self.chrome_version}", "Not(A:Brand";v="24", "Google Chrome";v="{self.chrome_version}"',
             "sec-ch-ua-mobile": "?0",
             "sec-ch-ua-platform": '"macOS"',
             "Sec-Fetch-Dest": "empty",
             "Sec-Fetch-Mode": "cors",
             "Sec-Fetch-Site": "same-site",
-            "User-Agent": user_agent
+            "User-Agent": self.user_agent
         }
 
         self.request_headers = {
@@ -198,24 +200,27 @@ class GeneratePromo:
             "Connection": "keep-alive",
             "Host": "in.alienwarearena.com",
             "Referer": "https://in.alienwarearena.com/ucf/show/2170237/boards/contest-and-giveaways-global/one-month-of-discord-nitro-exclusive-key-giveaway",
-            "sec-ch-ua": '"Chromium";v="122", "Not(A:Brand";v="24", "Google Chrome";v="122"',
+            "sec-ch-ua": f'"Chromium";v="{self.chrome_version}", "Not(A:Brand";v="24", "Google Chrome";v="{self.chrome_version}"',
             "sec-ch-ua-mobile": "?0",
             "sec-ch-ua-platform": '"macOS"',
             "Sec-Fetch-Dest": "empty",
             "Sec-Fetch-Mode": "cors",
             "Sec-Fetch-Site": "same-origin",
-            "User-Agent": user_agent,
+            "User-Agent": self.user_agent,
             "X-Requested-With": "XMLHttpRequest"
         }
 
         self.email = Utils.fetch_email()
 
-    def register_account(self) -> bool:
+    def register_account(self, tries: int = 1) -> bool:
+        if tries > 30:
+            raise Exception(f"Failed to register account after 30 tries | {self.email}.")
 
         try:
             response = self.session.get("https://in.alienwarearena.com/account/register", headers=self.page_headers)
         except TLSClientExeption:
-            return self.register_account()
+            return self.register_account(tries + 1)
+
 
         token = Utils.extract_token(response.text, "user_registration[_token]")
 
@@ -232,13 +237,13 @@ class GeneratePromo:
             "user_registration[timezone]": "Asia/Kolkata",
             "user_registration[sourceInfo]": None,
             "user_registration[referralCode]": "",
-            "user_registration[recaptcha3]": Utils.solve_recaptcha("registration")
+            "user_registration[recaptcha3]": Utils.solve_recaptcha(self.user_agent, "registration")
         }
 
         try:
             response = self.session.post("https://in.alienwarearena.com/account/register", headers=self.page_headers, data=data, allow_redirects=True)
         except TLSClientExeption:
-            return self.register_account()
+            return self.register_account(tries + 1)
 
         if response.url != "https://in.alienwarearena.com/account/check-email":
             try:
@@ -251,14 +256,17 @@ class GeneratePromo:
         else:
             return True
 
-    def verify_email(self, verification_link: str) -> bool:
+    def verify_email(self, verification_link: str, tries: int = 1) -> bool:
+        if tries > 30:
+            raise Exception(f"Failed to verify account after 30 tries | {self.email}.")
+
         self.session.cookies.clear()
 
         try:
             response = self.session.get(verification_link, headers=self.email_headers)
             response = self.session.get(response.headers["Location"], headers=self.page_headers)
         except TLSClientExeption:
-            return self.verify_email(verification_link)
+            return self.verify_email(verification_link, tries + 1)
 
         token = Utils.extract_token(response.text, "platformd_user_confirm_registration[_token]")
         data = {
@@ -268,18 +276,21 @@ class GeneratePromo:
         try:
             response = self.session.post(response.url, headers=self.page_headers, data=data)
         except TLSClientExeption:
-            return self.verify_email(verification_link)
+            return self.verify_email(verification_link, tries + 1)
 
         if response.status_code == 302:
             return True
         else:
             raise Exception(f"Failed to verify e-mail | {self.email}")
 
-    def set_password(self) -> None:
+    def set_password(self, tries: int = 1) -> None:
+        if tries > 30:
+            raise Exception(f"Failed to complete registration after 30 tries | {self.email}.")
+
         try:
             response = self.session.get("https://in.alienwarearena.com/incomplete", headers=self.page_headers)
         except TLSClientExeption:
-            return self.set_password()
+            return self.set_password(tries + 1)
 
         token = Utils.extract_token(response.text, "platformd_incomplete_account[_token]")
 
@@ -294,14 +305,16 @@ class GeneratePromo:
         try:
             self.session.post("https://in.alienwarearena.com/incomplete", headers=self.page_headers, data=data, allow_redirects=True)
         except TLSClientExeption:
-            return self.set_password()
+            return self.set_password(tries + 1)
 
-    def complete_profile(self) -> bool:
+    def complete_profile(self, tries: int = 1) -> bool:
+        if tries > 30:
+            raise Exception(f"Failed to complete registration after 30 tries | {self.email}.")
 
         try:
             response = self.session.get("https://in.alienwarearena.com/incomplete", headers=self.page_headers)
         except TLSClientExeption:
-            return self.complete_profile()
+            return self.complete_profile(tries + 1)
 
         token = Utils.extract_token(response.text, "platformd_incomplete_account[_token]")
         data = {
@@ -316,7 +329,7 @@ class GeneratePromo:
         try:
             response = self.session.post("https://in.alienwarearena.com/incomplete", headers=self.page_headers, data=data, allow_redirects=True)
         except TLSClientExeption:
-            return self.complete_profile()
+            return self.complete_profile(tries + 1)
 
         if response.status_code == 200:
             return True
@@ -324,11 +337,14 @@ class GeneratePromo:
             raise Exception(f"Failed to complete registration | {self.email}")
 
 
-    def get_promo_details(self) -> tuple:
+    def get_promo_details(self, tries: int = 1) -> tuple:
+        if tries > 30:
+            raise Exception(f"Failed to get promo details after 30 tries | {self.email}.")
+
         try:
             response = self.session.get("https://in.alienwarearena.com/ucf/show/2170237/boards/contest-and-giveaways-global/one-month-of-discord-nitro-exclusive-key-giveaway", headers=self.page_headers)
         except TLSClientExeption:
-            return self.get_promo_details()
+            return self.get_promo_details(tries + 1)
 
         user_id_match = re.search(r'var user_id\s*=\s*(\d+);', response.text)
         user_uuid_match = re.search(r'var user_uuid\s*=\s*"(.*?)";', response.text)
@@ -342,12 +358,15 @@ class GeneratePromo:
 
         return user_id, user_uuid, user_country, login_id
 
-    def extract_promo_key(self, user_id: int, user_uuid: str, user_country: str, login_id: int) -> bool:
+    def extract_promo_key(self, user_id: int, user_uuid: str, user_country: str, login_id: int, tries: int = 1) -> bool:
+        if tries > 30:
+            raise Exception(f"Failed to extract promo after 30 tries | {self.email}.")
+
         params = {
             "giveaway_uuid": "df863897-304c-4985-830c-56414830ade7",
             "api_key": "a75eb2f0-3f7a-4742-96c7-202977acb4cf",
             "user_uuid": user_uuid,
-            "recaptcha_token": Utils.solve_recaptcha("getkey"),
+            "recaptcha_token": Utils.solve_recaptcha(self.user_agent, "getkey"),
             "extra_info": json.dumps({
                 "siteId": 7,
                 "siteGroupId": 1,
@@ -359,21 +378,27 @@ class GeneratePromo:
         try:
             response = self.session.get("https://giveawayapi.alienwarearena.com/production/key/get", headers=self.key_headers, params=params)
         except TLSClientExeption:
-            return self.extract_promo_key(user_id, user_uuid, user_country, login_id)
+            return self.extract_promo_key(user_id, user_uuid, user_country, login_id, tries + 1)
 
         if response.status_code == 200:
             return True
         else:
             raise Exception(f"Failed to get promo key | {self.email} | " + response.json()["errorMessage"])
 
-    def get_promo_key(self) -> str:
+    def get_promo_key(self, tries: int = 1) -> str:
+        if tries > 30:
+            raise Exception(f"Failed to get promo key after 30 tries | {self.email}.")
+
         try:
             response = self.session.get("https://in.alienwarearena.com/giveaways/keys", headers=self.request_headers)
         except TLSClientExeption:
-            return self.get_promo_key()
+            return self.get_promo_key(tries + 1)
 
         if response.status_code == 200:
-            return response.json()[0]["value"]
+            try:
+                return response.json()[0]["value"]
+            except IndexError:
+                raise Exception(f"Failed to get promo code | {self.email}.")
         else:
             raise Exception(f"Failed to get promo code | {self.email}.")
 
