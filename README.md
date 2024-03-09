@@ -16,5 +16,8 @@
 > 2) Open the folder in command prompt or terminal.
 > 3) Run `pip install -r requirements.txt`.
 > 4) Put proxies in  residential Indian proxies in `proxies.txt`, format: `username:password@host:port` or `ip:port`.
-> 5) Put capsolver API key (https://dashboard.capsolver.com/passport/register?inviteCode=LyJfsyi3ypCa) in the `CAPSOLVER_KEY` variable in the code.
+> 5) Put capsolver API key (https://dashboard.capsolver.com/passport/register?inviteCode=LyJfsyi3ypCa) in the `CAPSOLVER_KEY` variable in the code after adding balance in your capsolver account.
 > 6) Run `python main.py`.
+
+
+Do NOT DM me asking for help on how to use it. I will block you.
