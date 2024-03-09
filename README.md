@@ -20,4 +20,4 @@
 > 6) Run `python main.py`.
 
 
-Do NOT DM me asking for help on how to use it. I will block you.
+Do NOT DM me asking for help. I will block you.
