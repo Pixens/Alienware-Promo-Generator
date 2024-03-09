@@ -3,10 +3,10 @@
 Creates 1 Month Nitro Promo Links using the Nitro X Alienware collaboration.
 <div id="top"></div>
 <p align="left">
-  <img src="https://img.shields.io/github/stars/Pixens/Discord-Token-Mail-Verifier.svg?style=for-the-badge"/>
-  <img src="https://img.shields.io/github/forks/Pixens/Discord-Token-Mail-Verifier.svg?style=for-the-badge"/>
-  <img src="https://img.shields.io/github/issues/Pixens/Discord-Token-Mail-Verifier.svg?style=for-the-badge"/>
-  <img src="https://img.shields.io/github/contributors/Pixens/Discord-Token-Mail-Verifier.svg?style=for-the-badge"/>
+  <img src="https://img.shields.io/github/stars/Pixens/Alienware-Promo-Generator.svg?style=for-the-badge"/>
+  <img src="https://img.shields.io/github/forks/Pixens/Alienware-Promo-Generator.svg?style=for-the-badge"/>
+  <img src="https://img.shields.io/github/issues/Pixens/Alienware-Promo-Generator.svg?style=for-the-badge"/>
+  <img src="https://img.shields.io/github/contributors/Pixens/Alienware-Promo-Generator.svg?style=for-the-badge"/>
 </p>
 
 ## How To Run?
