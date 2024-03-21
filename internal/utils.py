@@ -64,7 +64,7 @@ class Utils:
     def solve_recaptcha(user_agent: str, page_action: str) -> str:
         task_payload = {
             "clientKey": CAPSOLVER_KEY,
-            "AppID": "C10FB33E-8CED-4F6D-990C-356E42F5E318",
+            "appId": "C10FB33E-8CED-4F6D-990C-356E42F5E318",
             "task": {
                 "type": "ReCaptchaV3TaskProxyLess",
                 "websiteURL": "https://in.alienwarearena.com/",
