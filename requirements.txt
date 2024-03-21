@@ -1,4 +1,5 @@
 names
+pyyaml
 requests
 beautifulsoup4
 colorama
