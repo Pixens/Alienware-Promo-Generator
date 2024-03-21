@@ -13,8 +13,8 @@ from internal.logger import Logger
 from internal.utils import Utils, Data
 from tls_client.exceptions import TLSClientExeption
 
-os.system("")
 
+os.system("")
 
 with open("config.yml", "r") as c:
     config = yaml.safe_load(c)
