@@ -1,7 +1,5 @@
 # Alienware-Promo-Generator
 
-# Uploading fix at 50 stars.
-
 - Creates 1 Month Nitro Promo Links using the Nitro X Alienware collaboration.
 - Buy Best Discord Tools & Best Residential Proxies at https://boostup.cc
 
