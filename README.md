@@ -1,4 +1,4 @@
-# Alienware-Promo-Generator
+# Alienware Promo Generator
 
 - Creates 1 Month Nitro Promo Links using the Nitro X Alienware collaboration.
 - Buy Best Discord Tools & Best Residential Proxies at https://boostup.cc
@@ -14,10 +14,10 @@
 ## How To Run?
 > 1) Clone / download this repository.
 > 2) Open the folder in command prompt or terminal.
-> 3) Run `pip install -r requirements.txt`.
-> 4) Put proxies in  residential Indian proxies in `proxies.txt`, format: `username:password@host:port` or `ip:port`.
-> 5) Put capsolver API key (https://dashboard.capsolver.com/passport/register?inviteCode=LyJfsyi3ypCa) in the `CAPSOLVER_KEY` variable in the code after adding balance in your capsolver account.
-> 6) Run `python main.py`.
+> 3) Run the command: `pip install -r requirements.txt`.
+> 4) Put sticky residential Indian proxies in `proxies.txt`, format: `username:password@host:port` or `ip:port`.
+> 5) Put capsolver API key (https://dashboard.capsolver.com/passport/register?inviteCode=LyJfsyi3ypCa) in the `capsolver-key` variable in the config after adding balance in your capsolver account.
+> 6) Run using `python main.py`.
 
 
 Do NOT DM me asking for help. I will block you.
