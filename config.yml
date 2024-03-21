@@ -1,0 +1,5 @@
+retries: 15
+# Number of retries for the API call
+
+capsolver-key: ""
+# Input your https://dashboard.capsolver.com/passport/register?inviteCode=LyJfsyi3ypCa API Key in the field above.
