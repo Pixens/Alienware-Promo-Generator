@@ -1,4 +1,5 @@
 # Alienware Promo Generator
+# TempMail has been flagged on Alienware leading to the generator not working anymore. 100 stars for outlook/hotmail support.
 
 - Creates 1 Month Nitro Promo Links using the Nitro X Alienware collaboration.
 - Buy Best Discord Tools & Best Residential Proxies at https://boostup.cc
