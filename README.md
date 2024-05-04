@@ -20,5 +20,10 @@
 > 5) Put capsolver API key (https://dashboard.capsolver.com/passport/register?inviteCode=LyJfsyi3ypCa) in the `capsolver-key` variable in the config after adding balance in your capsolver account.
 > 6) Run using `python main.py`.
 
+# Disclaimer
+
+This is intended for educational purposes only. The creator assumes no responsibility for any illegal activities carried out with it, and the code is made public for viewing purposes only. Please use this ethically and responsibly.
+
+# Note
 
 Do NOT message me asking for help. I will block you.
